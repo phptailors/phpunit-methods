@@ -3,7 +3,7 @@
 /*
  * This file is part of phptailors/phpunit-extensions.
  *
- * Copyright (c) Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * Copyright (c) Paweł Tomulik <pawel@tomulik.pl>
  *
  * View the LICENSE file for full copyright and license information.
  */
@@ -29,7 +29,7 @@ final class HasMethodTest extends TestCase
     /**
      * @param mixed $args
      */
-    public function createConstraint(...$args): Constraint
+    public static function createConstraint(...$args): Constraint
     {
         return HasMethod::create(...$args);
     }

@@ -3,7 +3,7 @@
 /*
  * This file is part of phptailors/phpunit-extensions.
  *
- * Copyright (c) Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * Copyright (c) Paweł Tomulik <pawel@tomulik.pl>
  *
  * View the LICENSE file for full copyright and license information.
  */
@@ -37,7 +37,7 @@ final class MethodSpecFactory implements MethodSpecFactoryInterface
      *
      * @throws MethodSpecSyntaxError
      */
-    public function fromString(string $string): MethodSpec
+    public function fromString(string $string): MethodSpecInterface
     {
         if (preg_match('/^'.self::RE_NAME.'$/', $string, $matches)) {
             /** @psalm-var non-empty-string */
@@ -87,7 +87,7 @@ final class MethodSpecFactory implements MethodSpecFactoryInterface
      *
      * @psalm-param-out array<string> $matches
      */
-    private function lookahead(array &$expressions, string &$string, array &$matches = null): bool
+    private function lookahead(array &$expressions, string &$string, ?array &$matches = null): bool
     {
         foreach ($expressions as $offset => $expression) {
             if (preg_match('/^'.$expression.'\b/', $string, $matches)) {

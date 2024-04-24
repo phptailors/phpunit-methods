@@ -3,7 +3,7 @@
 /*
  * This file is part of phptailors/phpunit-extensions.
  *
- * Copyright (c) Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * Copyright (c) Paweł Tomulik <pawel@tomulik.pl>
  *
  * View the LICENSE file for full copyright and license information.
  */
@@ -12,6 +12,7 @@ namespace Tailors\PHPUnit;
 
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\Constraint\LogicalNot;
+use PHPUnit\Framework\ExpectationFailedException;
 use Tailors\PHPUnit\Constraint\HasMethod;
 
 trait HasMethodTrait
@@ -23,9 +24,8 @@ trait HasMethodTrait
      * @param Constraint $constraint
      * @param string     $message
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Tailors\PHPUnit\InvalidArgumentException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
     abstract public static function assertThat($value, Constraint $constraint, string $message = ''): void;
 
@@ -39,9 +39,8 @@ trait HasMethodTrait
      * @param string $message
      *                           Optional failure message
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Tailors\PHPUnit\InvalidArgumentException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      *
      * // due to psalm bug #9151 we can't use this:
      * // @psalm-assert object|class-string|trait-string|interface-string $subject
@@ -64,9 +63,8 @@ trait HasMethodTrait
      * @param string $message
      *                           Optional failure message
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Tailors\PHPUnit\InvalidArgumentException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
     public static function assertNotHasMethod(
         string $methodSpec,
@@ -82,7 +80,7 @@ trait HasMethodTrait
      * @param string $methodSpec
      *                           Method specification (name and optionally specified modifiers)
      *
-     * @throws \Tailors\PHPUnit\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function hasMethod(string $methodSpec): HasMethod
     {

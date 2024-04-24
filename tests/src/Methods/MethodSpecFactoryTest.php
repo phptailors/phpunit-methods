@@ -3,24 +3,27 @@
 /*
  * This file is part of phptailors/phpunit-extensions.
  *
- * Copyright (c) Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * Copyright (c) Paweł Tomulik <pawel@tomulik.pl>
  *
  * View the LICENSE file for full copyright and license information.
  */
 
 namespace Tailors\PHPUnit\Methods;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @small
  *
- * @covers \Tailors\PHPUnit\Methods\MethodSpecFactory
- *
  * @internal This class is not covered by the backward compatibility promise
  *
  * @psalm-internal Tailors\PHPUnit
+ *
+ * @coversNothing
  */
+#[CoversClass(MethodSpecFactory::class)]
 final class MethodSpecFactoryTest extends TestCase
 {
     public const IS_STATIC = MethodSpec::IS_STATIC;
@@ -31,7 +34,7 @@ final class MethodSpecFactoryTest extends TestCase
     public const IS_FINAL = MethodSpec::IS_FINAL;
 
     public const MMASK =
-          self::IS_STATIC
+        self::IS_STATIC
         | self::IS_PUBLIC
         | self::IS_PROTECTED
         | self::IS_PRIVATE
@@ -39,7 +42,7 @@ final class MethodSpecFactoryTest extends TestCase
         | self::IS_FINAL;
 
     public const VMASK =
-          self::IS_PUBLIC
+        self::IS_PUBLIC
         | self::IS_PROTECTED
         | self::IS_PRIVATE;
 
@@ -53,7 +56,7 @@ final class MethodSpecFactoryTest extends TestCase
      *  1: array{name:mixed, static:mixed, access:mixed, abstract:mixed, final:mixed}
      * }>
      */
-    public function provFromString(): iterable
+    public static function provFromString(): iterable
     {
         function results(array $array = [], string $name = 'foo')
         {
@@ -137,9 +140,7 @@ final class MethodSpecFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provFromString
-     */
+    #[DataProvider('provFromString')]
     public function testFromString(string $string, array $expect): void
     {
         $factory = new MethodSpecFactory();
@@ -154,7 +155,7 @@ final class MethodSpecFactoryTest extends TestCase
     /**
      * @psalm-return array<array-key, array{0: string, 1:string}>
      */
-    public function provFromStringSyntaxError(): iterable
+    public static function provFromStringSyntaxError(): iterable
     {
         yield ['', ''];
 
@@ -277,9 +278,7 @@ final class MethodSpecFactoryTest extends TestCase
         yield ['abstract static final function foo', 'final function foo'];
     }
 
-    /**
-     * @dataProvider provFromStringSyntaxError
-     */
+    #[DataProvider('provFromStringSyntaxError')]
     public function testFromStringSyntaxError(string $string, string $at): void
     {
         $factory = new MethodSpecFactory();

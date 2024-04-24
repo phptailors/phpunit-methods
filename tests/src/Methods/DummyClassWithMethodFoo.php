@@ -10,11 +10,10 @@
 
 namespace Tailors\PHPUnit\Methods;
 
-/**
- * Specifies requirements on method including its name and modifiers.
- *
- * @internal This class is not covered by the backward compatibility promise
- */
-final class MethodSpecSyntaxError extends \Exception {}
-
-// vim: syntax=php sw=4 ts=4 et:
+class DummyClassWithMethodFoo
+{
+    public function foo(): void
+    {
+        // empty
+    }
+}

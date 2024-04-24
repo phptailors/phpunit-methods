@@ -3,7 +3,7 @@
 /*
  * This file is part of phptailors/phpunit-extensions.
  *
- * Copyright (c) Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * Copyright (c) Paweł Tomulik <pawel@tomulik.pl>
  *
  * View the LICENSE file for full copyright and license information.
  */
@@ -18,18 +18,14 @@ interface InterfaceWithMethodFooV4C0Z
 final class ClassWithMethodFooV4C0Z
 {
     // @codeCoverageIgnoreStart
-    public function foo(): void
-    {
-    }
+    public function foo(): void {}
     // @codeCoverageIgnoreEnd
 }
 
 trait TraitWithMethodFooV4C0Z
 {
     // @codeCoverageIgnoreStart
-    public function foo(): void
-    {
-    }
+    public function foo(): void {}
     // @codeCoverageIgnoreEnd
 }
 
@@ -45,7 +41,7 @@ trait ProvHasMethodTrait
     /**
      * @psalm-return array<array{0:string,1:mixed,2:string}>
      */
-    public function provHasMethodSucceeds(): array
+    public static function provHasMethodSucceeds(): array
     {
         return [
             [
@@ -79,7 +75,7 @@ trait ProvHasMethodTrait
     /**
      * @psalm-return array<array{0:string,1:mixed,2:string}>
      */
-    public function provHasMethodFails(): array
+    public static function provHasMethodFails(): array
     {
         return [
             [

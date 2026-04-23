@@ -21,15 +21,7 @@ use Tailors\PHPUnit\Methods\MethodSpecSyntaxError;
  */
 final class HasMethod extends Constraint
 {
-    /**
-     * @var MethodSpecInterface
-     */
-    private $methodSpec;
-
-    public function __construct(MethodSpecInterface $methodSpec)
-    {
-        $this->methodSpec = $methodSpec;
-    }
+    public function __construct(private readonly MethodSpecInterface $methodSpec) {}
 
     /**
      * @throws InvalidArgumentException
@@ -70,7 +62,7 @@ final class HasMethod extends Constraint
 
         try {
             $method = new \ReflectionMethod($other, $this->methodSpec->getName());
-        } catch (\ReflectionException $exception) {
+        } catch (\ReflectionException) {
             return false;
         }
 
@@ -78,11 +70,9 @@ final class HasMethod extends Constraint
     }
 
     /**
-     * @param mixed $other
-     *
      * @psalm-assert-if-true object|class-string|trait-string|interface-string $other
      */
-    private function ensureCanReflectAsClass($other): bool
+    private function ensureCanReflectAsClass(mixed $other): bool
     {
         return is_object($other) || (is_string($other) && (
             interface_exists($other) || class_exists($other) || trait_exists($other)

@@ -31,11 +31,9 @@ final class HasMethodTraitTest extends TestCase
     /**
      * @dataProvider provHasMethodSucceeds
      *
-     * @param mixed $subject
-     *
      * @psalm-param non-empty-string $method
      */
-    public function testHasMethodSucceeds(string $method, $subject)
+    public function testHasMethodSucceeds(string $method, mixed $subject)
     {
         self::assertThat($subject, self::hasMethod($method));
     }
@@ -43,11 +41,9 @@ final class HasMethodTraitTest extends TestCase
     /**
      * @dataProvider provHasMethodSucceeds
      *
-     * @param mixed $subject
-     *
      * @psalm-param non-empty-string $method
      */
-    public function testAssertHasMethodSucceeds(string $method, $subject)
+    public function testAssertHasMethodSucceeds(string $method, mixed $subject)
     {
         self::assertHasMethod($method, $subject);
     }
@@ -55,11 +51,9 @@ final class HasMethodTraitTest extends TestCase
     /**
      * @dataProvider provHasMethodFails
      *
-     * @param mixed $subject
-     *
      * @psalm-param non-empty-string $method
      */
-    public function testAssertHasMethodFails(string $method, $subject, string $message)
+    public function testAssertHasMethodFails(string $method, mixed $subject, string $message)
     {
         self::expectException(ExpectationFailedException::class);
         self::expectExceptionMessage($message);
@@ -70,11 +64,9 @@ final class HasMethodTraitTest extends TestCase
     /**
      * @dataProvider provHasMethodFails
      *
-     * @param mixed $subject
-     *
      * @psalm-param non-empty-string $method
      */
-    public function testNotHasMethodSucceeds(string $method, $subject)
+    public function testNotHasMethodSucceeds(string $method, mixed $subject)
     {
         self::assertThat($method, self::logicalNot(self::hasMethod($method)));
     }
@@ -82,11 +74,9 @@ final class HasMethodTraitTest extends TestCase
     /**
      * @dataProvider provHasMethodFails
      *
-     * @param mixed $subject
-     *
      * @psalm-param non-empty-string $method
      */
-    public function testAssertNotHasMethodSucceeds(string $method, $subject)
+    public function testAssertNotHasMethodSucceeds(string $method, mixed $subject)
     {
         self::assertNotHasMethod($method, $subject);
     }
@@ -94,11 +84,9 @@ final class HasMethodTraitTest extends TestCase
     /**
      * @dataProvider provHasMethodSucceeds
      *
-     * @param mixed $subject
-     *
      * @psalm-param non-empty-string $method
      */
-    public function testAssertNotHasMethodFails(string $method, $subject, string $message)
+    public function testAssertNotHasMethodFails(string $method, mixed $subject, string $message)
     {
         self::expectException(ExpectationFailedException::class);
         self::expectExceptionMessage($message);

@@ -21,7 +21,15 @@ use Tailors\PHPUnit\Methods\MethodSpecSyntaxError;
  */
 final class HasMethod extends Constraint
 {
-    public function __construct(private readonly MethodSpecInterface $methodSpec) {}
+    /**
+     * @var MethodSpecInterface
+     */
+    private $methodSpec;
+
+    public function __construct(MethodSpecInterface $methodSpec)
+    {
+        $this->methodSpec = $methodSpec;
+    }
 
     /**
      * @throws InvalidArgumentException
@@ -44,17 +52,17 @@ final class HasMethod extends Constraint
     /**
      * Returns a string representation of the constraint.
      */
-    #[\Override]
     public function toString(): string
     {
         return sprintf('has %s()', $this->methodSpec->toString());
     }
 
     /**
+     * @param mixed $other
+     *
      * @psalm-assert-if-true object|class-string|trait-string|interface-string $other
      */
-    #[\Override]
-    final protected function matches(mixed $other): bool
+    final protected function matches($other): bool
     {
         if (!$this->ensureCanReflectAsClass($other)) {
             return false;
@@ -62,7 +70,7 @@ final class HasMethod extends Constraint
 
         try {
             $method = new \ReflectionMethod($other, $this->methodSpec->getName());
-        } catch (\ReflectionException) {
+        } catch (\ReflectionException $exception) {
             return false;
         }
 
@@ -70,9 +78,11 @@ final class HasMethod extends Constraint
     }
 
     /**
+     * @param mixed $other
+     *
      * @psalm-assert-if-true object|class-string|trait-string|interface-string $other
      */
-    private function ensureCanReflectAsClass(mixed $other): bool
+    private function ensureCanReflectAsClass($other): bool
     {
         return is_object($other) || (is_string($other) && (
             interface_exists($other) || class_exists($other) || trait_exists($other)

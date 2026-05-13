@@ -11,8 +11,8 @@
 namespace Tailors\PHPUnit\StaticAnalysis\HappyPath\AssertHasMethod;
 
 use PHPUnit\Framework\ExpectationFailedException;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Tailors\PHPUnit\HasMethodTrait;
-use Tailors\PHPUnit\InvalidArgumentException;
 
 final class Assert extends \PHPUnit\Framework\Assert
 {
@@ -20,10 +20,13 @@ final class Assert extends \PHPUnit\Framework\Assert
 }
 
 /**
+ * @param mixed $subject
+ *
  * @throws ExpectationFailedException
  * @throws InvalidArgumentException
+ * @throws \Tailors\PHPUnit\InvalidArgumentException
  */
-function consume(string $method, mixed $subject): void
+function consume(string $method, $subject): void
 {
     Assert::assertHasMethod($method, $subject);
 }

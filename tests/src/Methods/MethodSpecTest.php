@@ -10,28 +10,25 @@
 
 namespace Tailors\PHPUnit\Methods;
 
-use Closure;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 
 /**
+ * @small
+ *
+ * @covers \Tailors\PHPUnit\Methods\MethodSpec
+ *
  * @internal This class is not covered by the backward compatibility promise
  *
  * @psalm-internal Tailors\PHPUnit
  */
-#[CoversClass(MethodSpec::class)]
-#[Small]
 final class MethodSpecTest extends TestCase
 {
-    public const int IS_STATIC = MethodSpec::IS_STATIC;
-    public const int IS_PUBLIC = MethodSpec::IS_PUBLIC;
-    public const int IS_PROTECTED = MethodSpec::IS_PROTECTED;
-    public const int IS_PRIVATE = MethodSpec::IS_PRIVATE;
-    public const int IS_ABSTRACT = MethodSpec::IS_ABSTRACT;
-    public const int IS_FINAL = MethodSpec::IS_FINAL;
+    public const IS_STATIC = MethodSpec::IS_STATIC;
+    public const IS_PUBLIC = MethodSpec::IS_PUBLIC;
+    public const IS_PROTECTED = MethodSpec::IS_PROTECTED;
+    public const IS_PRIVATE = MethodSpec::IS_PRIVATE;
+    public const IS_ABSTRACT = MethodSpec::IS_ABSTRACT;
+    public const IS_FINAL = MethodSpec::IS_FINAL;
 
     public const MMASK =
         self::IS_STATIC
@@ -58,7 +55,7 @@ final class MethodSpecTest extends TestCase
             $args = array_fill(0, $n, null);
 
             yield [
-                ['foo', ...$args],
+                array_merge(['foo'], $args),
                 [
                     'name'     => 'foo',
                     'static'   => null,
@@ -180,7 +177,9 @@ final class MethodSpecTest extends TestCase
         ];
     }
 
-    #[DataProvider('provConstructor')]
+    /**
+     * @dataProvider provConstructor
+     */
     public function testConstructor(array $args, array $expect): void
     {
         $spec = new MethodSpec(...$args);
@@ -192,12 +191,16 @@ final class MethodSpecTest extends TestCase
     }
 
     /**
-     * @psalm-return iterable<array-key, array{0: array{0: non-empty-string, 1?: ?bool, 2?: ?int, 3?: ?bool, 4?: ?bool}, 1: Closure(TestCase):ReflectionMethod, 2: bool}>
+     * @psalm-return iterable<array-key,array{
+     *  0: array{0:non-empty-string, 1?:?bool, 2?:?int, 3?:?bool, 4?:?bool},
+     *  1: \Closure(TestCase):\ReflectionMethod,
+     *  2: bool
+     * }>
      */
     public static function provMatches(): iterable
     {
         // just name
-        yield [['bar'], fn (TestCase $test) => self::makeMethod($test, 'foo'), false];
+        yield [['bar'], function (TestCase $test) { return self::makeMethod($test, 'foo'); }, false];
 
         $cases1 = [
             [],
@@ -214,7 +217,13 @@ final class MethodSpecTest extends TestCase
         ];
 
         foreach ($cases1 as $modifiers) {
-            yield [['foo'], fn (TestCase $test) => self::makeMethod($test, 'foo', ...$modifiers), true];
+            yield [
+                ['foo'],
+                function (TestCase $test) use ($modifiers) {
+                    return self::makeMethod($test, 'foo', ...$modifiers);
+                },
+                true,
+            ];
         }
 
         // Test single boolean modifier (static, abstract, final)
@@ -231,28 +240,36 @@ final class MethodSpecTest extends TestCase
             $args[$n] = true;
 
             yield [
-                ['foo', ...$args],
-                fn (TestCase $test) => self::makeMethod($test, 'foo', $modifier),
+                array_merge(['foo'], $args),
+                function (TestCase $test) use ($modifier) {
+                    return self::makeMethod($test, 'foo', $modifier);
+                },
                 true,
             ];
 
             yield [
-                ['foo', ...$args],
-                fn (TestCase $test) => self::makeMethod($test, 'foo', self::MMASK & ~$modifier),
+                array_merge(['foo'], $args),
+                function (TestCase $test) use ($modifier) {
+                    return self::makeMethod($test, 'foo', self::MMASK & ~$modifier);
+                },
                 false,
             ];
 
             $args[$n] = false;
 
             yield [
-                ['foo', ...$args],
-                fn (TestCase $test) => self::makeMethod($test, 'foo', $modifier),
+                array_merge(['foo'], $args),
+                function (TestCase $test) use ($modifier) {
+                    return self::makeMethod($test, 'foo', $modifier);
+                },
                 false,
             ];
 
             yield [
-                ['foo', ...$args],
-                fn (TestCase $test) => self::makeMethod($test, 'foo', self::MMASK & ~$modifier),
+                array_merge(['foo'], $args),
+                function (TestCase $test) use ($modifier) {
+                    return self::makeMethod($test, 'foo', self::MMASK & ~$modifier);
+                },
                 true,
             ];
         }
@@ -268,23 +285,28 @@ final class MethodSpecTest extends TestCase
         foreach ($cases3 as $modifier) {
             yield [
                 ['foo', null, $modifier],
-                fn (TestCase $test) => self::makeMethod($test, 'foo', $modifier),
+                function (TestCase $test) use ($modifier) {
+                    return self::makeMethod($test, 'foo', $modifier);
+                },
                 true,
             ];
 
             yield [
                 ['foo', null, $modifier],
-                fn (TestCase $test) => self::makeMethod($test, 'foo', self::VMASK & ~$modifier),
+                function (TestCase $test) use ($modifier) {
+                    return self::makeMethod($test, 'foo', self::VMASK & ~$modifier);
+                },
                 false,
             ];
         }
     }
 
     /**
+     * @dataProvider provMatches
+     *
      * @psalm-param list                     $args
      * @psalm-param \Closure(TestCase):mixed $method
      */
-    #[DataProvider('provMatches')]
     public function testMatches(array $args, \Closure $method, bool $expect): void
     {
         $spec = new MethodSpec(...$args);
@@ -367,7 +389,9 @@ final class MethodSpecTest extends TestCase
         ];
     }
 
-    #[DataProvider('provToString')]
+    /**
+     * @dataProvider provToString
+     */
     public function testToString(array $args, string $expect): void
     {
         $spec = new MethodSpec(...$args);
@@ -376,41 +400,51 @@ final class MethodSpecTest extends TestCase
 
     private static function makeMethod(TestCase $test, string $name, int $modifiers = self::IS_PUBLIC)
     {
-        $stub = $test->getStubBuilder(DummyClassWithMethodFoo::class)
-            ->getStub()
+        $stub = $test->getMockBuilder(\stdClass::class)
+            ->addMethods([$name])
+            ->getMock()
         ;
-        $stub->method($name);
+        $stub->expects($test->any())
+            ->method($name)
+        ;
 
-        $method = $test->getStubBuilder(\ReflectionMethod::class)
+        $method = $test->getMockBuilder(\ReflectionMethod::class)
             ->setConstructorArgs([$stub, $name])
-            ->getStub()
+            ->getMock()
         ;
 
-        $method->method('isStatic')
+        $method->expects($test->any())
+            ->method('isStatic')
             ->willReturn(0 !== ($modifiers & self::IS_STATIC))
         ;
 
-        $method->method('isPublic')
+        $method->expects($test->any())
+            ->method('isPublic')
             ->willReturn(0 !== ($modifiers & self::IS_PUBLIC))
         ;
 
-        $method->method('isProtected')
+        $method->expects($test->any())
+            ->method('isProtected')
             ->willReturn(0 !== ($modifiers & self::IS_PROTECTED))
         ;
 
-        $method->method('isPrivate')
+        $method->expects($test->any())
+            ->method('isPrivate')
             ->willReturn(0 !== ($modifiers & self::IS_PRIVATE))
         ;
 
-        $method->method('isAbstract')
+        $method->expects($test->any())
+            ->method('isAbstract')
             ->willReturn(0 !== ($modifiers & self::IS_ABSTRACT))
         ;
 
-        $method->method('isFinal')
+        $method->expects($test->any())
+            ->method('isFinal')
             ->willReturn(0 !== ($modifiers & self::IS_FINAL))
         ;
 
-        $method->method('getModifiers')
+        $method->expects($test->any())
+            ->method('getModifiers')
             ->willReturn($modifiers)
         ;
 

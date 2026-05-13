@@ -27,7 +27,6 @@ final class HasMethodTest extends TestCase
 {
     use ProvHasMethodTrait;
 
-    #[\Override]
     public static function createConstraint(mixed ...$args): Constraint
     {
         return HasMethod::create(...$args);
@@ -40,14 +39,13 @@ final class HasMethodTest extends TestCase
      *
      * @psalm-pure
      */
-    #[\Override]
     public static function getConstraintClass(): string
     {
         return HasMethod::class;
     }
 
     #[DataProvider('provHasMethodSucceeds')]
-    public function testHasMethodMatchSucceeds(string $method, mixed $subject, string $_): void
+    public function testHasMethodMatchSucceeds(string $method, mixed $subject): void
     {
         parent::examineConstraintMatchSucceeds([$method], $subject);
     }
@@ -65,7 +63,7 @@ final class HasMethodTest extends TestCase
     }
 
     #[DataProvider('provHasMethodFails')]
-    public function testNotHasMethodMatchSucceeds(string $method, mixed $subject, string $_): void
+    public function testNotHasMethodMatchSucceeds(string $method, mixed $subject): void
     {
         parent::examineNotConstraintMatchSucceeds([$method], $subject);
     }

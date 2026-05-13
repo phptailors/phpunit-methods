@@ -30,12 +30,12 @@ namespace Tailors\PHPUnit\Methods;
  */
 final readonly class MethodSpec implements MethodSpecInterface
 {
-    public const int IS_STATIC = \ReflectionMethod::IS_STATIC;
-    public const int IS_PUBLIC = \ReflectionMethod::IS_PUBLIC;
-    public const int IS_PROTECTED = \ReflectionMethod::IS_PROTECTED;
-    public const int IS_PRIVATE = \ReflectionMethod::IS_PRIVATE;
-    public const int IS_ABSTRACT = \ReflectionMethod::IS_ABSTRACT;
-    public const int IS_FINAL = \ReflectionMethod::IS_FINAL;
+    public const IS_STATIC = \ReflectionMethod::IS_STATIC;
+    public const IS_PUBLIC = \ReflectionMethod::IS_PUBLIC;
+    public const IS_PROTECTED = \ReflectionMethod::IS_PROTECTED;
+    public const IS_PRIVATE = \ReflectionMethod::IS_PRIVATE;
+    public const IS_ABSTRACT = \ReflectionMethod::IS_ABSTRACT;
+    public const IS_FINAL = \ReflectionMethod::IS_FINAL;
 
     public const ACCESS_MASK = self::IS_PUBLIC | self::IS_PROTECTED | self::IS_PRIVATE;
 
@@ -46,7 +46,7 @@ final readonly class MethodSpec implements MethodSpecInterface
     /**
      * @psalm-var array<AccessStr,AccessInt>
      */
-    public const array ACCESS_MAP = [
+    public const ACCESS_MAP = [
         'public'     => self::IS_PUBLIC,
         'protected'  => self::IS_PROTECTED,
         'private'    => self::IS_PRIVATE,
@@ -59,17 +59,33 @@ final readonly class MethodSpec implements MethodSpecInterface
      * @psalm-param non-empty-string $name
      */
     public function __construct(
+        /**
+         * @psalm-var non-empty-string
+         *
+         * @psalm-readonly
+         */
         private string $name,
+        /**
+         * @psalm-readonly
+         */
         private ?bool $static = null,
+        /**
+         * @psalm-readonly
+         */
         private ?int $access = null,
+        /**
+         * @psalm-readonly
+         */
         private ?bool $abstract = null,
+        /**
+         * @psalm-readonly
+         */
         private ?bool $final = null
     ) {}
 
     /**
      * {@inheridoc}.
      */
-    #[\Override]
     public function getName(): string
     {
         return $this->name;
@@ -78,7 +94,6 @@ final readonly class MethodSpec implements MethodSpecInterface
     /**
      * {@inheridoc}.
      */
-    #[\Override]
     public function getStatic(): ?bool
     {
         return $this->static;
@@ -87,7 +102,6 @@ final readonly class MethodSpec implements MethodSpecInterface
     /**
      * {@inheridoc}.
      */
-    #[\Override]
     public function getAccess(): ?int
     {
         return $this->access;
@@ -96,7 +110,6 @@ final readonly class MethodSpec implements MethodSpecInterface
     /**
      * {@inheridoc}.
      */
-    #[\Override]
     public function getAbstract(): ?bool
     {
         return $this->abstract;
@@ -105,7 +118,6 @@ final readonly class MethodSpec implements MethodSpecInterface
     /**
      * {@inheridoc}.
      */
-    #[\Override]
     public function getFinal(): ?bool
     {
         return $this->final;
@@ -114,7 +126,6 @@ final readonly class MethodSpec implements MethodSpecInterface
     /**
      * {@inheridoc}.
      */
-    #[\Override]
     public function matches(\ReflectionMethod $method): bool
     {
         return $this->matchName($method)
@@ -127,7 +138,6 @@ final readonly class MethodSpec implements MethodSpecInterface
     /**
      * {@inheridoc}.
      */
-    #[\Override]
     public function toString(): string
     {
         $final = $this->getFinalModifierString();

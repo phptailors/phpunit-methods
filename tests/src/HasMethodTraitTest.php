@@ -10,7 +10,7 @@
 
 namespace Tailors\PHPUnit;
 
-use PHPUnit\Framework\Attributes\CoversTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -22,7 +22,7 @@ use Tailors\PHPUnit\Constraint\ProvHasMethodTrait;
  *
  * @psalm-internal Tailors\PHPUnit
  */
-#[CoversTrait(HasMethodTrait::class)]
+#[CoversClass(HasMethodTrait::class)]
 #[Small]
 final class HasMethodTraitTest extends TestCase
 {
@@ -33,7 +33,7 @@ final class HasMethodTraitTest extends TestCase
      * @psalm-param non-empty-string $method
      */
     #[DataProvider('provHasMethodSucceeds')]
-    public function testHasMethodSucceeds(string $method, mixed $subject, string $_)
+    public function testHasMethodSucceeds(string $method, mixed $subject)
     {
         self::assertThat($subject, self::hasMethod($method));
     }
@@ -42,7 +42,7 @@ final class HasMethodTraitTest extends TestCase
      * @psalm-param non-empty-string $method
      */
     #[DataProvider('provHasMethodSucceeds')]
-    public function testAssertHasMethodSucceeds(string $method, mixed $subject, string $_)
+    public function testAssertHasMethodSucceeds(string $method, mixed $subject)
     {
         self::assertHasMethod($method, $subject);
     }
@@ -63,7 +63,7 @@ final class HasMethodTraitTest extends TestCase
      * @psalm-param non-empty-string $method
      */
     #[DataProvider('provHasMethodFails')]
-    public function testNotHasMethodSucceeds(string $method, mixed $subject, string $_)
+    public function testNotHasMethodSucceeds(string $method, mixed $subject)
     {
         self::assertThat($method, self::logicalNot(self::hasMethod($method)));
     }
@@ -72,7 +72,7 @@ final class HasMethodTraitTest extends TestCase
      * @psalm-param non-empty-string $method
      */
     #[DataProvider('provHasMethodFails')]
-    public function testAssertNotHasMethodSucceeds(string $method, mixed $subject, string $_)
+    public function testAssertNotHasMethodSucceeds(string $method, mixed $subject)
     {
         self::assertNotHasMethod($method, $subject);
     }
